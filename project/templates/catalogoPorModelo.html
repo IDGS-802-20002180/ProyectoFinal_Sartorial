@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/verModelos.css') }}">
+  <!-- Productos -->
+  <div class="container">
+    <h2 class="text-center my-4">Productos del modelo: <b><label id="titulo">{{productos[0].modelo}}</label></b></h2>
+    <div class="row">
+            <!-- Producto principal -->
+            <link rel="stylesheet" href="../static/css/detalleProducto.css">
+            <div class="container mt-5" id="contenedorProducto">
+              <div class="row">
+                <div class="col-md-6">
+                  <img src="{{ url_for('static', filename='img/' + productos[0].imagen) }}" alt="Imagen del Producto" height="300" id="imagenPrincipal">
+                </div>
+                <div class="col-md-6">
+                  <h1 class="mb-3" id="nombreProducto">{{productos[0].nombre}}</h1>
+                  <h4 class="mb-3" id="modeloProducto">{{productos[0].modelo}}</h4>
+                  <p class="mb-2" id="colorProducto">Color: {{productos[0].color}}</p>        
+                  <p class="mb-2" id="descripcionProducto">{{productos[0].descripcion}}</p>
+                  <div class="form-group">
+                    <label for="tallaProducto">Tallas disponibles</label>
+                    <select class="form-control" id="tallaProducto" name="tallaProducto">
+                      {% for producto in productos %}
+                      <option value="{{ producto.id }}">
+                        {% if producto.talla == 'S'%}  
+                        Chica
+                        {% elif producto.talla == 'M'%}
+                        Mediana
+                        {% else %}
+                        Grande
+                        {% endif %}
+                        -
+                        {{producto.stock_existencia}} unidades disponibles
+                      </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <span class="text-center" style="top: 0%;">Colores</span>
+                  <div class="row">
+                      {% for producto in productos %}
+                      {% if producto.color!=productos[0].color%}
+                          <div class="col-md-4">
+                              <img id="imagenProducto{{producto.id}}" src="{{ url_for('static', filename='img/' + producto.imagen) }}" alt="{{producto.nombre}}" height="100px" width="150px" onclick="mostrarProducto({{producto.id}})">
+                          </div>
+                          <script>
+
+function mostrarProducto(idProducto) {
+  // Obtener el producto correspondiente al id
+  var producto = null;
+  for (var i = 0; i < productos.length; i++) {
+    if (productos[i].id == idProducto) {
+      producto = productos[i];
+      break;
+    }
+  }
+
+  // Actualizar la imagen y los datos del producto principal
+  var imagenPrincipal = document.getElementById('imagenPrincipal');
+  imagenPrincipal.src = "{{ url_for('static', filename='img/' + producto.imagen) }}";
+  document.getElementById('nombreProducto').innerHTML = producto.nombre;
+  document.getElementById('modeloProducto').innerHTML= producto.modelo;
+document.getElementById('colorProducto').innerHTML = "Color: " + producto.color;
+document.getElementById('descripcionProducto').innerHTML = producto.descripcion;
+
+// Actualizar las opciones de talla disponibles
+var opcionesTalla = '';
+for (var i = 0; i < productos.length; i++) {
+if (productos[i].id == idProducto) {
+opcionesTalla += '<option value="' + productos[i].id + '">' + productos[i].talla + ' - ' + productos[i].stock_existencia + ' unidades disponibles</option>';
+}
+}
+document.getElementById('tallaProducto').innerHTML = opcionesTalla;
+
+// Actualizar la imagen y los datos del producto correspondiente
+var imagenProducto = document.getElementById('imagenProducto' + idProducto);
+imagenProducto.src = "{{ url_for('static', filename='img/' + productos[0].imagen) }}";
+imagenProducto.alt = productos[0].nombre;
+imagenProducto.onclick = function() {mostrarProducto(productos[0].id);};
+// Actualizar las opciones de talla disponibles del producto correspondiente
+var opcionesTallaProducto = '';
+for (var i = 0; i < productos.length; i++) {
+if (productos[i].color == producto.color) {
+opcionesTallaProducto += '<option value="' + productos[i].id + '">' + productos[i].talla + ' - ' + productos[i].stock_existencia + ' unidades disponibles</option>';
+}
+}
+document.getElementById('tallaProducto').innerHTML = opcionesTallaProducto;
+}
+
+</script>
+    {% endif %}
+      {% endfor %}
+              </div>
+                  
+                  {% if current_user.is_authenticated %}
+                  <form id="agregarCarrito" method="POST" action="{{ url_for('cliente.pedidos')}}">
+                    <div class="form-group">
+                      <label for="cantidad">Cantidad: </label>
+                      <input min="0" max="10" type="number" class="form-control" id="txtCantCar" value="1">                
+                      <button class="btn btn-primary mt-3" onclick="carrito()">Agregar a Carrito</button>      
+                    </div>
+                  </form> 
+                  <div>
+                    <button id="verTallas" class="learn-more" onclick="abrirVentana();">
+                      <span class="circle" aria-hidden="true">
+                        <span class="icon arrow"></span>
+                      </span>
+                      <span class="button-text">Guía de Tallas</span>
+                    </button>
+                  </div>     
+                  {% else %}
+                  <form id="regresarLogin" action="{{ url_for('auth.login')}}">
+                    <div class="form-group">
+                      <label for="cantidad">Cantidad: </label>
+                      <input type="number" class="form-control" id="cantidad" value="0">                
+                      <button class="btn btn-primary mt-3" onclick="">Agregar a Carrito</button>      
+                    </div>
+                  </form> 
+                  <div>
+                    <button id="verTallas" class="learn-more">
+                      <span class="circle" aria-hidden="true">
+                        <span class="icon arrow"></span>
+                      </span>
+                      <span class="button-text">Guía de Tallas</span>
+                    </button>
+                  </div> 
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+      
+    </div>
+  </div>
+
+
+  <script>
+    function carrito() {
+        // Obtener el elemento select
+        var selectElement = document.getElementById('tallaProducto');
+        
+        // Obtener el valor seleccionado
+        var selectedValue = selectElement.value;
+        
+        // Obtener el elemento de cantidad
+        var cantidadElement = document.getElementById('txtCantCar');
+        
+        // Obtener el valor de cantidad
+        var cantidad = cantidadElement.value;
+    
+        // Construir la URL con los valores seleccionados
+        var url = "pedidos?idProducto=" + selectedValue + "&cantidad=" + cantidad;
+    
+        // Obtener el formulario
+        var formulario = document.getElementById('agregarCarrito');
+        
+        // Establecer los atributos del formulario
+        formulario.setAttribute('method', 'POST');
+        formulario.setAttribute('action', url);
+        
+        // Enviar el formulario
+        formulario.submit();
+    }
+    
+        </script>
+        <script>
+          var productos = [
+            {% for producto in productos %}
+            {
+              id: {{ producto.id }},
+              nombre: '{{ producto.nombre }}',
+              modelo: '{{ producto.modelo }}',
+              color: '{{ producto.color }}',
+              descripcion: '{{ producto.descripcion }}',
+              talla: '{{ producto.talla }}',
+              stock_existencia: {{ producto.stock_existencia }},
+              imagen: '{{ producto.imagen }}'
+            },
+            {% endfor %}
+          ];
+          console.log(productos);
+          </script>
+          <script>
+            function abrirVentana() {
+              // Abre una nueva ventana con la imagen de la guía de tallas
+              window.open("../static/images/guiaTallas.jpg", "_blank", "height=600,width=800");
+            }
+            </script>
+{% endblock %}

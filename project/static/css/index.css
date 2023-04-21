@@ -1,0 +1,191 @@
+#bienvenida {
+    background-image: url(../img/FondoSectionBienvenida.jpeg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: auto;
+    height: 600px;
+    text-align: center;
+    padding-top: 300px;
+}
+
+h1 {
+    color: gold;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 70px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-top: 0;
+}
+
+h2 {
+    color: gold;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 40px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-top: 0;
+}
+
+h4 {
+    color: black;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-top: 0;
+}
+
+#sectionInformacion {
+    padding: 20px;
+    text-align: center;
+   
+}
+
+#sectionInformacion h5 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 0;
+}
+
+#sectionInformacion span {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #0056b3;
+    border-radius: 50px;
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+
+h4.text-center {
+    font-size: 2rem;
+    color: #444;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px #eee;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 0.5rem;
+}
+
+
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    border-radius: 5px;
+    height: 100%;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card-img-top {
+    height: 200px;
+}
+
+.card-body {
+    text-align: center;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-text {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.more-info-btn {
+    background-color: #292929;
+    border-color: #292929;
+    margin-right: 0.5rem;
+}
+
+.more-info-btn:hover {
+    background-color: #212121;
+    border-color: #212121;
+}
+
+.card-footer {
+    text-align: center;
+    background-color: #212121;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: gold;
+}
+
+
+
+.text-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#filtrosForm .btn {
+    display: inline-block;
+    margin-right: 80px;
+}
+
+#btnTrajes,
+#btnCamisas,
+#btnSacos,
+#btnPantalones,
+#btnCorbatas,
+#btnTodos {
+    background-color: #292929;
+    border-color: #292929;
+    margin-right: 0.5rem;
+    width: 100px;
+    height: 80px;
+    margin-top: auto;
+    margin-bottom: auto;
+    color: #fff;
+}
+
+#btnTrajes:hover,
+#btnCamisas:hover,
+#btnSacos:hover,
+#btnPantalones:hover,
+#btnCorbatas:hover,
+#btnTodos:hover {
+    background-color: #fff;
+    border-color: #212121;
+    color: #212121
+}
+
+#btnTodos {
+    text-align: center;
+}
+
+.btn-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    color: #333;
+    font-size: 16px;
+}
+
+.btn-icon img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
+}
+
+

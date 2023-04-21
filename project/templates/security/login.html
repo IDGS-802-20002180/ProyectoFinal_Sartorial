@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="../static/css/login.css">
+<div class="container my-3" id="container">
+    <div class="form-container sign-up-container">
+        <form method="POST" action="/security/register">
+            <h1>Crea una Cuenta</h1>
+            <div class="social-container">
+                <a href="#" class="social"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" class="social"><i class="fa-brands fa-google" style="color: #ff570f;"></i></a>
+                <a href="#" class="social"><i class="fa-brands fa-linkedin" style="color: #01286a;"></i></a>
+            </div>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="alert alert-danger">
+                {{ messages[0] }}
+            </div>
+            {% endif %}
+            {% endwith %}
+            <span>or use your email for registration</span>
+            <input type="text" placeholder="Name" name="name"/>
+            <input type="email" placeholder="Email" name="email"/>
+            <input type="password" placeholder="Password" name="password"/>
+            <button>Sign Up</button>
+        </form>
+    </div>
+    <div class="form-container sign-in-container">
+        <form method="POST" action="/security/login">
+            <h1>Iniciar Sesión</h1>
+            <div class="social-container">
+                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="alert alert-danger">
+                {{ messages[0] }}
+            </div>
+            {% endif %}
+            {% endwith %}
+            <span>or use your account</span>
+            <input type="email" placeholder="Email" name="email"/>
+            <input type="password" placeholder="Password" name="password" />
+            <button>Sign In</button>
+        </form>
+    </div>
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h1>¡Bienvenido de nuevo!</h1>
+                <p>Para mantenerse conectado con nosotros, inicie sesión con su información personal</p>
+                <button class="ghost" id="signIn">Sign In</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1>¡Hola, Amigo!</h1>
+                <p>Ingresa tus datos personales y comienza tu viaje con nosotros</p>
+                <button class="ghost" id="signUp">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../static/js/login.js"></script>
+{% endblock %}

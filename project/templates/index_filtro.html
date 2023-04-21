@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="../static/css/index.css">
+<link rel="stylesheet" href="../static/css/carruselCards.css">
+<link rel="stylesheet" type="text/css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
+<link rel="stylesheet" type="text/css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
+
+<section class="hero my-1" id="bienvenida">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="display-4">
+        ¡Bienvenidos a Sartorial!
+      </h1>
+      <h2 class="lead">
+        Aquí encontrarás la mejor calidad de ropa de etiqueta a los mejores precios.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <h4 class="text-center">Novedades</h4>
+
+  <div class="wrapper">
+
+    <div class="carousel">
+      {% for produc in prod%}
+      <div>
+
+        <div class="card">
+          <div class="card-header">
+            <img src="{{ url_for('static', filename='img/' + produc.imagen) }}">
+          </div>
+          <div class="card-body">
+            <div class="card-content">
+              <div class="card-titulo">{{produc.nombre}}</div>
+              <div class="card-text">
+                <p>$ {{produc.precio}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+
+</section>
+
+<section class=" my-8" id="sectionInformacion">
+  <div>
+    <span class="my-8">
+      <h5>
+        Envios Gratis en todos nuestros productos
+      </h5>
+    </span>
+  </div>
+</section>
+
+
+<section class="section my-1">
+  <div class="container">
+    <h4 class="text-center">Nuestros Productos</h4>
+    <section class="text-left">
+
+      <form id="filtrosForm" method="POST" action="{{ url_for('main.filtrarProducto')}}">
+        <div class="row d-flex">
+          <button type="submit" id="btnTrajes" onclick="formFlitros('btnTrajes')" class="btn btn-icon d-inline-block">
+            <img src="../static/images/traje-de-novio.png">
+            <span>Trajes</span>
+          </button>
+          <button type="submit" id="btnCamisas" onclick="formFlitros('btnCamisas')" class="btn btn-icon d-inline-block">
+            <img src="../static/images/camisa.png">
+            <span>Camisas</span>
+          </button>
+          <button type="submit" id="btnSacos" onclick="formFlitros('btnSacos')" class="btn btn-icon d-inline-block">
+            <img src="../static/images/traje.png">
+            <span>Sacos</span>
+          </button>
+          <button type="submit" id="btnPantalones" onclick="formFlitros('btnPantalones')"
+            class="btn btn-icon d-inline-block">
+            <img src="../static/images/pantalones.png">
+            <span>Pantalones</span>
+          </button>
+          <button type="submit" id="btnCorbatas" onclick="formFlitros('btnCorbatas')"
+            class="btn btn-icon d-inline-block">
+            <img src="../static/images/corbata.png">
+            <span>Corbatas</span>
+          </button>
+          <a href="{{ url_for('main.index') }}" class="btn btn-icon d-inline-block" id="btnTodos">
+            <img src="../static/images/select.png">
+            <span>Todos</span>
+          </a>
+        </div>
+      </form>
+    </section>
+
+
+    <div class="row">
+      {% for modelo, productos in productos_por_modelo.items() %}
+      {% if otrosAtributos[loop.index-1].estatus == 1 %}
+      
+        <div class="col-md-3 my-3">
+          <div class="card ">
+            <a href="{{ url_for('main.verModelos', modelo = modelo) }}">
+            <img class="card-img-top"
+              src="{{ url_for('static', filename='img/' + otrosAtributos[loop.index-1].imagen) }}" alt="Card image cap"
+              height="350">
+            </a>
+            <div class="card-body" id="{{modelo}}">
+              {% if modelo == otrosAtributos[loop.index-1].modelo%}
+              <p class="card-text h4" style="display: table; text-align: center;">
+                {{otrosAtributos[loop.index-1].nombre}}</p>
+              <p class="card-text h5" style="display: table;">Precio: ${{otrosAtributos[loop.index-1].precio}}</p>
+              <p class="card-text h5" style="display: none;">Descripción: {{otrosAtributos[loop.index-1].descripcion}}
+              </p>
+              <p class="card-text h5" style="display: none;">
+              </p>
+              <h5 class="card-text h5" style="display: table;">Modelo : {{ modelo }}</h5>
+              {% endif %}
+    </div>
+  </div>
+  </div>
+  {%endif%}
+  {% endfor %}
+
+
+  </div>
+
+  </div>
+  </div>
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4" id="enviosGratis">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title text-danger">Envío gratis</h3>
+            <h6 class="card-subtitle mb-2 text-muted">En todos nuestros productos.</h6>
+            <p class="card-text">Realiza tus compras sin preocupaciones y recibe tus productos en la comodidad de tu
+              hogar.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4" id="CambiosSinCosto">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title text-info">Cambios sin costo</h3>
+            <h6 class="card-subtitle mb-2 text-muted">Si algo no te queda bien, lo cambiamos sin costo.</h6>
+            <p class="card-text">Queremos que te sientas cómodo y seguro con tus compras, por lo que ofrecemos cambios
+              sin costo adicional.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4" id="productosCalidad">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title text-success">Productos de calidad</h3>
+            <h6 class="card-subtitle mb-2 text-muted">Nos aseguramos de ofrecer solo lo mejor.</h6>
+            <p class="card-text">Cada uno de nuestros productos es seleccionado cuidadosamente para garantizar calidad y
+              satisfacción en cada compra.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="text/javascript" src="../static/js/jquery.min.js"></script>
+<script src="../static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+<script src="../static/js/slick.min.js"></script>
+<script src="../static/js/carruselCards.js"></script>
+<script>
+  let moreInfoBtns = document.querySelectorAll('.more-info-btn');
+
+  moreInfoBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      let moreInfoDiv = btn.nextElementSibling;
+      if (moreInfoDiv.style.display === 'none') {
+        moreInfoDiv.style.display = 'block';
+      } else {
+        moreInfoDiv.style.display = 'none';
+      }
+    });
+  });
+  function formFlitros(nombre) {
+    if (nombre == 'btnTrajes') {
+      var idSeleccionado = 'Traje';
+    }
+    else if (nombre == 'btnCamisas') {
+      var idSeleccionado = 'Camisa';
+    }
+    else if (nombre == 'btnSacos') {
+      var idSeleccionado = 'Saco';
+    }
+    else if (nombre == 'btnPantalones') {
+      var idSeleccionado = 'Pantalones';
+    }
+    else if (nombre == 'btnCorbatas') {
+      var idSeleccionado = 'Corbata';
+    }
+    var url = "{{ url_for('main.filtrarProducto', nombre ='') }}" + idSeleccionado;
+    document.getElementById('filtrosForm').setAttribute('method', 'POST');
+    document.getElementById('filtrosForm').setAttribute('action', url);
+    document.getElementById('filtrosForm').submit();
+
+  }
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,128 @@
+#contenedorProducto {
+    background-color: #f5f5f5;
+    padding: 50px;
+    border-radius: 10px;
+}
+
+#contenedorProducto img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+}
+
+#contenedorProducto h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+#contenedorProducto h4 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+#contenedorProducto p {
+    font-size: 1.2rem;
+    color: #777;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+}
+
+#contenedorProducto label {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #333;
+}
+
+#contenedorProducto select {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #333;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1.5rem;
+}
+
+#contenedorProducto .form-control:focus {
+    box-shadow: none;
+    border-color: #007bff;
+}
+
+#contenedorProducto .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 0.5rem 2rem;
+    transition: all 0.3s ease;
+}
+
+#contenedorProducto .btn-primary:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+#contenedorProducto .learn-more {
+    display: inline-block;
+    position: relative;
+    background-color: transparent;
+    color: #007bff;
+    border: 2px solid #007bff;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 0.5rem 2rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+#contenedorProducto .learn-more .circle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+#contenedorProducto .learn-more .circle .icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+}
+
+#contenedorProducto .learn-more:hover .circle {
+    width: 100%;
+}
+
+#contenedorProducto .learn-more:hover .circle .icon {
+    transform: translate(-50%, -50%) rotate(180deg);
+}
+
+@media only screen and (max-width: 767px) {
+    #contenedorProducto {
+        padding: 25px;
+    }
+
+    #contenedorProducto h1 {
+        font-size: 2rem;
+    }
+
+    #contenedorProducto h4 {
+        font-size: 1.2rem;
+    }
+
+    #contenedorProducto p {
+        font-size: 1rem;
+    }
+
+    #contenedorProducto label {
+        font-size: 1rem;
+    }
+}
