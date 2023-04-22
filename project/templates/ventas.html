@@ -26,107 +26,115 @@
     </div>
 </div>
 
-
-<div class="container-fluid" id="ventasP" style="display: none;">
-    <h1>Ventas Pendientes por Enviar</h1>
-    <button class="btn btn-primary float-right" id="regresar" onclick="regresarVentas();"><i
-            class="fas fa-arrow-left mr-2"> </i>Regresar</button>
-    <form method="POST" action="">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="fecha">Fecha de compra :</label>
-                    <input type="date" class="form-control mx-2" id="fecha" name="fecha">
-                </div>
-                <button type="button" class="btn btn-primary" onclick="buscarPorFecha()">Buscar</button>
-            </div>
+<div class="container-fluid table-responsive" id="ventasP" style="display: none;">
+    <div class="card">
+        <div class=" card-header">
+            <h1 class="card-title">Ventas Pendientes por Enviar</h1>
+            <button class="btn btn-primary float-right" id="regresar" onclick="regresarVentas();">
+                <i class="fas fa-arrow-left mr-2"></i> Regresar
+            </button>
         </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table" id="comprasTabla">
+        <div class="card-body">
+            <form class="form-inline my-3" method="POST">
+                <div class="form-group">
+                    <label for="fechaR" class="mr-2">Fecha de compra:</label>
+                    <input type="date" class="form-control mr-2" id="fechaR" name="fechaR">
+                </div>
+                <button type="button" class="btn btn-primary" onclick="buscarPorFechaR()">Buscar</button>
+            </form>
+            <hr>
+            <div class="table-responsive">
+                <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Fecha</th>
-                            <th>Cliente</th>
-                            <th></th>
-                            <th></th>
+                            <th class="text-center align-middle">Fecha</th>
+                            <th class="text-center align-middle">Cliente</th>
+                            <th class="text-center align-middle"></th>
+                            <th class="text-center align-middle"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for venta, user in ventas_pendientes %}
                         <tr>
-                            <td>{{ venta.fecha }}</td>
-                            <td>{{ user.name }}</td>
-                            <td>
+                            <td class="text-center align-middle">{{ venta.fecha }}</td>
+                            <td class="text-center align-middle">{{ user.name }}</td>
+                            <td class="text-center align-middle">
                                 <input type="number" name="id" value="{{venta.id}}" hidden>
                                 <a href="{{ url_for('administrador.detalleVenta', id=venta.id, estatus=venta.estatus) }}"
-                                    class="btn btn-primary">
-                                    <i class="fa-solid fa-eye fa-flip" style="color: #000000;"></i> Ver detalles</a>
+                                    class="btn btn-primary btn-sm">
+                                    <i class="fa-solid fa-eye fa-flip" style="color: #000000;"></i> Ver detalles
+                                </a>
                             </td>
-                            <td>
+                            <td class="text-center align-middle">
                                 <form method="POST" action="/ventas">
                                     <input type="number" name="id" value="{{venta.id}}" hidden>
-                                    <button type="submit" class="btn btn-success" name="confirmar">Confirmar
+                                    <button type="submit" class="btn btn-success btn-sm" name="confirmar">Confirmar
                                         Envio</button>
                                 </form>
+                                <br>
                             </td>
                         </tr>
                         {% endfor %}
-
                     </tbody>
                 </table>
             </div>
         </div>
-    </form>
-
+    </div>
 </div>
 
 
-<div class="container-fluid" id="ventasE" style="display: none;">
-    <h1>Ventas Enviadas</h1>
-    <button class="btn btn-primary float-right" id="regresar" onclick="regresarVentas();"><i
-            class="fas fa-arrow-left mr-2"> </i>Regresar</button>
-    <div class="row">
-        <div class="col-md-6">
-            <form class="form-inline" method="POST">
+
+<div class="container-fluid table-responsive" id="ventasE" style="display: none;">
+    <div class="card">
+        <div class=" card-header">
+            <h1 class="card-title">Ventas Enviadas</h1>
+            <button class="btn btn-primary float-right" id="regresar" onclick="regresarVentas();"><i
+                    class="fas fa-arrow-left mr-2"> </i>Regresar</button>
+        </div>
+        <div class="card-body">
+            <form class="form-inline my-3" method="POST">
                 <div class="form-group">
-                    <label for="fechaR">Fecha de compra :</label>
-                    <input type="date" class="form-control mx-2" id="fechaR" name="fechaR">
+                    <label for="fechaR" class="mr-2">Fecha de compra:</label>
+                    <input type="date" class="form-control mr-2" id="fechaR" name="fechaR">
                 </div>
                 <button type="button" class="btn btn-primary" onclick="buscarPorFechaR()">Buscar</button>
             </form>
-        </div>
-    </div>
-    <hr>
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Cliente</th>
-                        <th></th>
+            <hr>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="text-center align-middle">Fecha</th>
+                                <th class="text-center align-middle">Cliente</th>
+                                <th class="text-center align-middle"></th>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for venta, user in ventas_enviadas %}
-                    <tr>
-                        <td>{{ venta.fecha }}</td>
-                        <td>{{ user.name }}</td>
-                        <td>
-                            <a href="{{ url_for('administrador.detalleVenta', id=venta.id) }}" class="btn btn-primary">
-                                <i class="fa-solid fa-eye fa-flip" style="color: #000000;"></i> Ver detalles</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for venta, user in ventas_enviadas %}
+                            <tr>
+                                <td class="text-center align-middle">{{ venta.fecha }}</td>
+                                <td class="text-center align-middle">{{ user.name }}</td>
+                                <td class="text-center align-middle">
+                                    <a href="{{ url_for('administrador.detalleVenta', id=venta.id) }}"
+                                        class="btn btn-primary">
+                                        <i class="fa-solid fa-eye fa-flip" style="color: #000000;"></i> Ver detalles</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
 
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-
+<style>
+    h1 {
+        font-family: 'Times New Roman', Times, serif;
+    }
+</style>
 {% endblock %}

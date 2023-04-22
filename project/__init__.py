@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 from flask_security  import Security, SQLAlchemyUserDatastore
 from flask_sqlalchemy import SQLAlchemy
 
@@ -30,7 +30,9 @@ def create_app():
     #Conectamos los modelos de Flask-security usando SQLALCHEMYUSERDATASTORE
     security = Security(app, userDataStore)
 
-    
+    @app.errorhandler(404)
+    def page_not_found(e):
+            return render_template('404.html'), 404
 
     #Registramos los blueprints
     from .auth import auth as auth_blueprint
@@ -42,6 +44,9 @@ def create_app():
 
     from .Cliente.routes import cliente as cliente_blueprint
     app.register_blueprint(cliente_blueprint)
+    
+    from .Empleado.routes import empleado as empleado_blueprint
+    app.register_blueprint(empleado_blueprint)
 
 
     from .main import main as main_blueprint

@@ -28,7 +28,7 @@
   <div class="wrapper">
 
     <div class="carousel">
-      {% for produc in prod%}
+      {% for produc in ultimos_productos%}
       <div>
 
         <div class="card">
@@ -182,6 +182,10 @@
 <script src="../static/js/slick.min.js"></script>
 <script src="../static/js/carruselCards.js"></script>
 <script>
+  window.scrollTo({
+    top: 1400,
+    behavior: 'smooth' // Agrega este comportamiento para una animación suave
+  });
   let moreInfoBtns = document.querySelectorAll('.more-info-btn');
 
   moreInfoBtns.forEach(btn => {

@@ -21,6 +21,12 @@ from plotly.subplots import make_subplots
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import plotly.graph_objs as go
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Spacer, Image
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib import colors
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.lib.units import inch
 import io 
 import logging
 from logging.handlers import RotatingFileHandler
@@ -676,6 +682,7 @@ def findUser():
 ################################### Gestion de Finanzas #############################
 
 
+
 @administrador.route("/finanzas", methods=['GET','POST'])
 @login_required
 def finanzas():
@@ -688,13 +695,188 @@ def finanzas():
             
     compras_por_mes = db.session.query(
                 func.date_format(Compra.fecha, '%Y-%m').label('mes'),
-                func.sum(DetCompra.cantidad * DetCompra.precio).label('total')
+                func.sum(DetCompra.precio).label('total')
             ).join(DetCompra).filter(
                 Compra.estatus == True
             ).group_by('mes').all()
-    print(compras_por_mes, " Compras")
-    return render_template('finanzas.html', ventas_por_mes=ventas_por_mes, compras_por_mes=compras_por_mes)
 
+
+    utilidad_mensual = []
+    for venta, compra in zip(ventas_por_mes, compras_por_mes):
+        if venta.mes == compra.mes:
+            utilidad_mensual.append({
+                'mes': venta.mes,
+                'utilidad': venta.total - compra.total
+            })
+    return render_template('finanzas.html', ventas_por_mes=ventas_por_mes, compras_por_mes=compras_por_mes,  utilidad_mensual=utilidad_mensual)
+
+
+
+
+
+
+@administrador.route("/reportesFinanzas", methods=['GET','POST'])
+@login_required
+def reportesFinanzas():
+    if request.method == 'POST':
+        fecha_inicio = request.form['fecha_inicio']
+        fecha_fin = request.form['fecha_fin']
+        radio_btn = request.form['radio_btn']
+
+        if radio_btn == 'ventas':
+            ventas = db.session.query(
+                    Venta.fecha,
+                    Producto.nombre,
+                    Producto.modelo,
+                    DetVenta.cantidad,
+                    DetVenta.precio,
+                    (DetVenta.cantidad * DetVenta.precio).label("total")
+                ).select_from(Venta).join(DetVenta).join(Producto).filter(
+                    Venta.fecha.between(fecha_inicio, fecha_fin)
+                ).all()
+            ventas_total = sum([v[5] for v in ventas])
+            encabezados = ['Fecha', 'Producto', 'Modelo', 'Cantidad', 'Precio Unitario', 'Total']
+            detalles = [encabezados] + [[
+                venta.fecha,
+                venta.nombre,
+                venta.modelo,
+                venta.cantidad,
+                venta.precio,
+                venta.total
+            ] for venta in ventas]
+
+            output = io.BytesIO()
+            doc = SimpleDocTemplate(output, pagesize=letter)
+            styles = getSampleStyleSheet()
+            styles.add(ParagraphStyle(name='Negrita', fontName='Helvetica-Bold', fontSize=14))
+
+            Story = []           
+            
+
+            # Agregar encabezado
+            im = Image("C:/IDGS802/ProyectoFinal_v2/ProyectoFinal-Sergio/project/static/images/Logo3S.png", width=300, height=150)
+            Story.append(im)          
+            Story.append(Spacer(1, 12))
+            Story.append(Paragraph("Sartorial Reporte de Ventas", styles["Title"]))
+            Story.append(Spacer(1, 12))
+            Story.append(Paragraph(f"Fecha de Impresión: {datetime.now().date()}", styles["Normal"]))
+            fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d').strftime('%d/%m/%Y')
+            fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d').strftime('%d/%m/%Y')
+            Story.append(Paragraph(f"Reporte del {fecha_inicio} al {fecha_fin}", styles["Negrita"]))
+            Story.append(Spacer(1, 12))    
+            Story.append(Spacer(1, 12))
+
+            # Agregar tabla de detalles
+            tableStyle = TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 14),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+                ('ALIGN', (0, 1), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 1), (-1, -1), 12),
+                ('BOTTOMPADDING', (0, 1), (-1, -1), 8),
+                ('BACKGROUND', (0, -1), (-1, -1), colors.grey),
+                ('TEXTCOLOR', (0, -1), (-1, -1), colors.whitesmoke),
+                ('ALIGN', (0, -1), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, -1), (-1, -1), 14),
+                ('TOPPADDING', (0, -1), (-1, -1), 12),
+                ('BOTTOMPADDING', (0, -1), (-1, -1), 12),
+                ])
+            t = Table(detalles)
+            t.setStyle(tableStyle)
+            Story.append(t)
+            Story.append(Spacer(1, 12))
+            # Agregar total de ventas
+            Story.append(Paragraph(f"Total de ventas: {ventas_total}", styles["Negrita"]))
+
+            # Construir PDF
+            doc.build(Story)
+            output.seek(0)
+            response = make_response(output.getvalue())
+            response.headers.set('Content-Disposition', 'attachment', filename=f'Rep_Ventas_{datetime.now().date()}.pdf')
+            response.headers.set('Content-Type', 'application/pdf')
+                        
+            return response
+        
+        elif radio_btn == 'compras':
+            
+            # Generar reporte de compras
+            compras = db.session.query(
+                Compra.fecha,
+                Proveedor.nombre.label("nombre_proveedor"),
+                InventarioMateriaPrima.nombre,
+                DetCompra.cantidad,
+                DetCompra.precio
+            ).select_from(Compra).join(DetCompra).join(InventarioMateriaPrima).join(Proveedor).filter(
+                Compra.fecha.between(fecha_inicio, fecha_fin)
+            ).all()
+            compras_total = sum([c[4] for c in compras])
+
+            encabezados = ['Fecha', 'Proveedor', 'Material', 'Cantidad', 'Total']
+            detalles = [encabezados] + [[
+                compra.fecha,
+                compra.nombre_proveedor,
+                compra.nombre,
+                compra.cantidad,
+                f"{compra.precio:.2f}",
+            ] for compra in compras]
+
+            output = io.BytesIO()
+            doc = SimpleDocTemplate(output, pagesize=letter, rightMargin=inch/2, leftMargin=inch/2, topMargin=inch/2, bottomMargin=inch/2)
+            styles = getSampleStyleSheet()
+            styles.add(ParagraphStyle(name='Negrita', fontName='Helvetica-Bold', fontSize=14))
+
+            Story = []
+
+            # Agregar encabezado
+            im = Image("C:/IDGS802/ProyectoFinal_v2/ProyectoFinal-Sergio/project/static/images/Logo3S.png", width=300, height=150)
+            Story.append(im)          
+            Story.append(Spacer(1, 12))
+            Story.append(Paragraph("Sartorial Reporte de Compras", styles["Title"]))
+            Story.append(Spacer(1, 12))
+                # Agregar fechas
+            Story.append(Paragraph(f"Fecha de Impresión: {datetime.now().date()}", styles["Normal"]))
+            fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d').strftime('%d/%m/%Y')
+            fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d').strftime('%d/%m/%Y')
+            Story.append(Paragraph(f"Reporte del {fecha_inicio} al {fecha_fin}", styles["Negrita"]))
+            Story.append(Spacer(1, 12))
+
+            # Agregar tabla de detalles
+            tabla = Table(detalles, colWidths=[80, 120, 120, 100, 70, 70, 70])
+            tabla.setStyle(TableStyle([
+                ('BACKGROUND', (0,0), (-1,0), colors.grey),
+                ('TEXTCOLOR', (0,0), (-1,0), colors.whitesmoke),
+                ('ALIGN', (0,0), (-1,0), 'CENTER'),
+                ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0,0), (-1,0), 14),
+                ('BOTTOMPADDING', (0,0), (-1,0), 12),
+                ('BACKGROUND', (0,1), (-1,-1), colors.beige),
+                ('TEXTCOLOR', (0,1), (-1,-1), colors.black),
+                ('ALIGN', (0,1), (-1,-1), 'CENTER'),
+                ('FONTNAME', (0,1), (-1,-1), 'Helvetica'),
+                ('FONTSIZE', (0,1), (-1,-1), 12),
+                ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
+                ('BOX', (0,0), (-1,-1), 0.25, colors.black)
+            ]))
+            Story.append(tabla)
+
+            # Agregar total
+            Story.append(Spacer(1, 12))
+            Story.append(Paragraph(f"Total de Compras: ${compras_total:.2f}", styles["Negrita"]))
+
+            doc.build(Story)
+            output.seek(0)
+            response = make_response(output.getvalue())
+            response.headers.set('Content-Disposition', 'attachment', filename=f'Rep_Compras_{datetime.now().date()}.pdf')
+            response.headers.set('Content-Type', 'application/pdf')
+            return response
+            
 
 
 #####################################################################################

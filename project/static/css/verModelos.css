@@ -1,49 +1,44 @@
-/* Estilos para la sección de productos */
+header {
+    background-image: url("https://images.unsplash.com/photo-1608574471467-8e1f0d7e2f13");
+    background-size: cover;
+    background-position: center center;
+    min-height: 200px;
+}
 
-
+#productos {
+    padding: 50px 0;
+}
 
 .card {
-    margin-bottom: 30px;
     border: none;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
 }
 
 .card-img-top {
-    display: block;
-    width: 100%;
-    height: auto;
+    height: 350px;
+    object-fit: cover;
 }
 
 .card-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 15px;
+    font-family: 'Times New Roman', Times, serif;
 }
 
-.card-subtitle {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.card-text {
-    font-size: 16px;
-    margin-bottom: 15px;
+.card-footer {
+    background-color: #f8f9fa;
+    border-top: none;
 }
 
 .btn-block {
-    display: block;
-    width: 100%;
-}
-
-.btn-primary {
-    background-color: #0056b3;
-    border-color: #0056b3;
-    font-size: 18px;
+    font-family: 'Times New Roman', Times, serif;
     font-weight: bold;
 }
 
-.btn-primary:hover {
-    background-color: #003f8e;
-    border-color: #003f8e;
+.btn-block:hover {
+    color: #f8f9fa;
+    background-color: #212529;
+    border-color: #212529;
 }

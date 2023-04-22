@@ -7,6 +7,22 @@
   href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
 <link rel="stylesheet" type="text/css"
   href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
+  <link rel="stylesheet" href="../static/sweetalert2/sweetalert2.min.css">
+<script src="../static/sweetalert2/sweetalert2.all.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery.min.js"></script>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+          <script>
+              Swal.fire({
+                  title: '{{ messages[0][1] }}',
+                  icon: '{{ messages[0][0] }}',
+                  showConfirmButton: true,
+                  timer: 4000
+              });
+          </script>
+  {% endif %}
+  {% endwith %}
+
 
 <section class="hero my-1" id="bienvenida">
   <div class="hero-body">
@@ -28,7 +44,7 @@
   <div class="wrapper">
 
     <div class="carousel">
-      {% for produc in prod%}
+      {% for produc in ultimos_productos%}
       <div>
 
         <div class="card">
@@ -156,10 +172,11 @@
       <div class="col-md-4" id="CambiosSinCosto">
         <div class="card">
           <div class="card-body">
-            <h3 class="card-title text-info">Cambios sin costo</h3>
-            <h6 class="card-subtitle mb-2 text-muted">Si algo no te queda bien, lo cambiamos sin costo.</h6>
-            <p class="card-text">Queremos que te sientas cómodo y seguro con tus compras, por lo que ofrecemos cambios
-              sin costo adicional.</p>
+            <h3 class="card-title text-info">Elegancia</h3>
+            <h6 class="card-subtitle mb-2 text-muted">Productos con un estilo Sofisticado</h6>
+            <p class="card-text">
+              Nuestros productos se enfocan en resaltar la elegancia del hombre en situaciones de gala acorde a sus necesidades.
+            </p>
           </div>
         </div>
       </div>

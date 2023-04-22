@@ -1,65 +1,99 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="text-white py-5" style="background-color: #374342;">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-3">
-          <img class="img-fluid rounded-left mb-3" src="../static/images/Logo3S.png">
-        </div>
-        <div class="col-md-9">
-          <h1 class="display-4">Conócenos</h1>
-          <p class="lead">Somos una empresa dedicada a la venta de ropa de hombre de la mejor calidad.</p>
-        </div>
+    <link rel="stylesheet" href="./static/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic&amp;display=swap">
+    <link rel="stylesheet" href="./static/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="./static/assets/fonts/simple-line-icons.min.css">
+    <link rel="stylesheet" href="./static/assets/css/aos.min.css">
+    <link rel="stylesheet" href="./static/assets/css/animate.min.css">
+
+    <section class="showcase">
+      <div class="container-fluid p-0">
+          <div class="row no-gutters">
+              <div class="col-lg-6 text-white order-lg-2 showcase-img" data-aos="fade-down" style="background-image: url(./static/images/SobreNosotros1.png);"><span></span></div>
+              <div class="col-lg-6 my-auto order-lg-1 bounce animated showcase-text">
+                  <h2>Nuestra historia</h2>
+                  <p class="lead mb-0 text-justify">Somos una empresa fundada en el año 2023, con el objetivo de ofrecer ropa de calidad para hombres que buscan vestir bien y sentirse cómodos. Nos enfocamos en ofrecer diseños modernos y elegantes, utilizando materiales de alta calidad y cuidando cada detalle en la confección de nuestras prendas.</p>
+              </div>
+          </div>
+          <div class="row no-gutters">
+              <div class="col-lg-6 text-white showcase-img" data-aos="fade-up" style="background-image: url(./static/images/SobreNosotros2.png);"><span></span></div>
+              <div class="col-lg-6 my-auto order-lg-1 bounce animated showcase-text">
+                  <h2>Misión</h2>
+                  <p class="lead mb-0 text-justify">Nuestra misión es ofrecer ropa de alta calidad y estilo a nuestros clientes a precios accesibles. Nos esforzamos por proporcionar una experiencia de compra excepcional a nuestros clientes, y nos comprometemos a brindar un servicio al cliente excepcional para garantizar su satisfacción en todo momento.</p>
+              </div>
+          </div>
+          <div class="row no-gutters">
+              <div class="col-lg-6 text-white order-lg-2 showcase-img" data-aos="fade-up" style="background-image: url(./static/images/SobreNosotros3.png);"><span></span></div>
+              <div class="col-lg-6 my-auto order-lg-1 bounce animated showcase-text">
+                  <h2>Visión</h2>
+                  <p class="lead mb-0 text-justify">La visión de Sartorial es ser la marca de ropa de caballero más reconocida y confiable en la industria de la moda, destacándonos por ofrecer ropa elegante y de alta calidad a precios accesibles. Buscamos establecer un estándar en la moda masculina, siendo líderes en diseño, calidad y servicio al cliente. Nuestro objetivo es ser la elección preferida de los hombres que buscan estilo y calidad, y ser una marca icónica en el mundo de la moda para caballero.</p>
+              </div>
+          </div>
       </div>
-    </div>
+  </section>
+  <section class="text-center bg-light testimonials">
+      <h1 data-aos="fade">Nuestros Valores</h1>
+      <section class="text-center bg-light features-icons">
+          <div class="container">
+              <div class="row">
+                  <div class="col-lg-4 col-xl-3" data-aos="slide-up">
+                      <div class="mx-auto features-icons-item mb-5 mb-lg-0 mb-lg-3">
+                          <div class="d-flex features-icons-icon"><i class="fas fa-check m-auto text-primary" data-bss-hover-animate="pulse"></i></div>
+                          <h3>Calidad</h3>
+                          <p class="lead mb-0">En todos nuestros productos</p>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 col-xl-3" data-aos="zoom-out-left">
+                      <div class="mx-auto features-icons-item mb-5 mb-lg-0 mb-lg-3">
+                          <div class="d-flex features-icons-icon"><i class="fas fa-handshake m-auto text-primary" data-bss-hover-animate="pulse"></i></div>
+                          <h3>Compromiso</h3>
+                          <p class="lead mb-0">Con nuestros preciados clientes</p>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 col-xl-3" data-aos="slide-up">
+                      <div class="mx-auto features-icons-item mb-5 mb-lg-0 mb-lg-3">
+                          <div class="d-flex features-icons-icon"><i class="fas fa-lightbulb m-auto text-primary" data-bss-hover-animate="pulse"></i></div>
+                          <h3>Innovación</h3>
+                          <p class="lead mb-0">Y creatividad en nuestros diseños</p>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 col-xl-3 offset-xl-0" data-aos="slide-up">
+                      <div class="mx-auto features-icons-item mb-5 mb-lg-0 mb-lg-3">
+                          <div class="d-flex features-icons-icon"><i class="fas fa-heart m-auto text-primary" data-bss-hover-animate="pulse"></i></div>
+                          <h3>Respeto</h3>
+                          <p class="lead mb-0">Y responsabilidad en nuestras acciones</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section>
   </section>
   
-  <section class="section">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <h2 class="title has-text-black">Nuestra historia</h2>
-          <p class="has-text-link">Somos una empresa fundada en el año 2023, con el objetivo de ofrecer ropa de calidad para hombres que buscan vestir bien y sentirse cómodos.</p>
-          <p class="has-text-link"> Nos enfocamos en ofrecer diseños modernos y elegantes, utilizando materiales de alta calidad y cuidando cada detalle en la confección de nuestras prendas.</p>
-          <p class="has-text-link">En nuestros años de experiencia hemos logrado construir una sólida reputación, ofreciendo productos de calidad y un servicio excepcional a nuestros clientes.</p>
-          <br>
-          <h2 class="title has-text-black">Mision</h2>
-          <p class="has-text-link">Nuestra misión es ofrecer ropa de alta calidad y estilo a nuestros clientes a precios accesibles. Nos esforzamos por proporcionar una experiencia de compra excepcional a nuestros clientes, y nos comprometemos a brindar un servicio al cliente excepcional para garantizar su satisfacción en todo momento.</p>
-          <br>
-          <h2 class="title has-text-black">Visión</h2>
-          <p class="has-text-link">Nuestra visión es convertirnos en la marca de ropa más reconocida y confiable en la industria de la moda. Queremos ser reconocidos por nuestra calidad, estilo y precios asequibles. Nos esforzamos por ser líderes en la industria de la moda, y queremos que nuestros clientes se sientan seguros y confiados al elegirnos como su marca de ropa preferida.</p>
-          <br>
-          <h2 class="title has-text-black">Valores</h2>
-          <ul class="has-text-link">
-            <li>Calidad en todos nuestros productos</li>
-            <li>Compromiso con nuestros clientes</li>
-            <li>Innovación y creatividad en nuestros diseños</li>
-            <li>Respeto y responsabilidad en nuestras acciones</li>
-          </ul>
+  <section class="text-center text-white call-to-action" style="background-color: lightgray;">  
+    <h1 data-aos="fade">Contacto</h1>  
+    <div class="row justify-content-center"><div class="col-lg-6">  
+    <form data-aos="fade-up">
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input type="text" class="form-control custom-input" id="nombre" name="nombre" placeholder="Ingresa tu nombre">
         </div>
-        <div class="col-md-6">
-          <h2 class="title has-text-black">Contáctanos</h2>
-          <form>
-            <div class="form-group">
-              <label class="label">Nombre</label>
-              <input class="form-control" type="text" placeholder="Ingresa tu nombre">
-            </div>
-            <div class="form-group">
-              <label class="label">Email</label>
-              <input class="form-control" type="email" placeholder="Ingresa tu correo electrónico">
-            </div>
-            <div class="form-group">
-              <label class="label">Comentarios</label>
-              <textarea class="form-control" placeholder="Escribe tu mensaje"></textarea>
-            </div>
-            <div class="form-group">
-              <button class="btn btn-info">Enviar</button>
-            </div>
-          </form>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control custom-input" id="email" name="email" placeholder="Ingresa tu email">
         </div>
-      </div>
+        <div class="form-group">
+          <label for="mensaje">Mensaje</label>
+          <textarea class="form-control custom-input" id="mensaje" name="mensaje" rows="4" placeholder="Ingresa tu mensaje"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block custom-btn">Enviar</button>
+      </form>
     </div>
+  </div>
   </section>
-  
+  <script src="./static/assets/js/jquery.min.js"></script>
+  <script src="./static/assets/bootstrap/js/bootstrap.min.js"></script>
+  <script src="./static/assets/js/aos.min.js"></script>
+  <script src="./static/assets/js/bs-init.js"></script>
 {% endblock %}

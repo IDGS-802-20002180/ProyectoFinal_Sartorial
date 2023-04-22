@@ -1,11 +1,12 @@
+from operator import or_
 import os
 import uuid
 from flask import Blueprint, render_template, flash, redirect, request, url_for, current_app, jsonify
 from flask_security import login_required, current_user
 from flask_security.decorators import roles_required, roles_accepted
 from . import db
-from sqlalchemy import and_, func, text
-from project.models import Role, Producto, DetVenta
+from sqlalchemy import and_, desc, func, text
+from project.models import DetPedido, Pedido, Role, Producto, DetVenta
 from werkzeug.utils import secure_filename
 import logging
 from logging.handlers import RotatingFileHandler
@@ -56,10 +57,14 @@ def index():
             'descripcion': producto.descripcion,
             'precio': producto.precio,
             'tallas': producto.talla,
-            'stock_existencia': producto.stock_existencia
+            'stock_existencia': producto.stock_existencia,
+            'color': producto.color
         })
-    
-    return render_template('index.html', productos_por_modelo = productos_por_modelo, otrosAtributos = otrosAtributos, prod = prod)
+    ultimos_productos = Producto.query.filter_by(estatus=1).order_by(desc(Producto.id)).limit(10).all()
+    if current_user.is_authenticated:
+        pedidos_disponibles = Pedido.query.filter_by(user_id=current_user.id, estatus=1).join(DetPedido).join(Producto).filter(Producto.stock_existencia > DetPedido.cantidad).count()
+        return render_template('index.html', productos_por_modelo = productos_por_modelo, otrosAtributos = otrosAtributos, prod = prod,ultimos_productos = ultimos_productos, pedidos_disponibles = pedidos_disponibles)
+    return render_template('index.html', productos_por_modelo = productos_por_modelo, otrosAtributos = otrosAtributos, prod = prod,ultimos_productos = ultimos_productos)
 
 
 @main.route('/filtrarProducto',methods=["GET","POST"])
@@ -118,8 +123,16 @@ def verProducto():
 def verModelos():
         productos = Producto.query.filter(Producto.modelo == request.args.get('modelo'))\
         .group_by(Producto.color).filter_by(estatus=1).all()
+        print("Estos son los productos por modelo agrupados----------------"+str(productos))
+        
+        prods = Producto.query.filter(and_(Producto.modelo == request.args.get('modelo'), 
+                                    Producto.color == request.args.get('color'))).filter_by(estatus=1).all()
+        
+        print("Estos son los productos por modelo y color----------------"+str(prods))
 
-        return render_template('catalogoPorModelo.html', productos = productos)
+        print(request.args.get('modelo'), request.args.get('color'))
+        color = request.args.get('color')
+        return render_template('catalogoPorModelo.html', productos = productos, prods=prods, color = color)
 
 @main.route('/principalAd',methods=["GET","POST"])
 @login_required

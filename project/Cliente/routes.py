@@ -9,7 +9,7 @@ from sqlalchemy import and_
 from sqlalchemy import func
 from sqlalchemy.orm import aliased
 from reportlab.lib.pagesizes import letter
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Image
@@ -100,13 +100,15 @@ def pedidos():
         pedidoID = id_obtenido
         productoID = request.args.get('idProducto')
         cantidad = cantidad
-        print("esta es la cantidad-----------"+cantidad)
+        
         detPed = DetPedido(pedido_id = pedidoID, producto_id = productoID,cantidad = cantidad)
         db.session.add(detPed)
         db.session.commit()
+        flash('Pedido realizado con éxito', 'success')
         return redirect(url_for('main.index'))
     
-    return render_template('pedidos.html', detPed = detPed, productos = productos)
+    pedidos_disponibles = Pedido.query.filter_by(user_id=current_user.id, estatus=1).join(DetPedido).join(Producto).filter(Producto.stock_existencia > DetPedido.cantidad).count()
+    return render_template('pedidos.html', detPed = detPed, productos = productos,pedidos_disponibles = pedidos_disponibles)
 
 @cliente.route('/eliminarPedido',methods=["GET","POST"])
 @login_required
@@ -120,7 +122,7 @@ def eliminarPedido():
         pedido.estatus = 0
         db.session.commit()
         return redirect(url_for('cliente.pedidos'))
-    
+    flash('Pedido eliminado con éxito', 'success')
     return render_template('eliminarPedido.html', detPed = detPed)
 
 #arreglar buscar pedido
@@ -150,6 +152,7 @@ def buscarPedido():
 ###################### Modulo de ventas ######################
 
 
+
 @cliente.route('/pagar', methods=['GET', 'POST'])
 @login_required
 def pagar():
@@ -175,6 +178,8 @@ def pagar():
                             'id': prod.id,
                             'nombre': prod.nombre,
                             'precio': prod.precio,
+                            'modelo': prod.modelo,
+                            'descripcion': prod.descripcion,
                             'cantidad': producto.cantidad,
                             'imagen': prod.imagen   
                         }
@@ -215,15 +220,20 @@ def pagar():
             output = io.BytesIO()
             doc = SimpleDocTemplate(output, pagesize=letter)
             styles = getSampleStyleSheet()
+            styles.add(ParagraphStyle(name='Negrita', fontName='Helvetica-Bold', fontSize=14))
             Story = []
             # Agregar encabezado
-            #im = Image("../static/img/logo_size_invert.jpg", width=150, height=150)
-            #Story.append(im)
+            im = Image("C:/IDGS802/ProyectoFinal_v2/ProyectoFinal-Sergio/project/static/images/Logo3S.png", width=300, height=150)
+            Story.append(im) 
             Story.append(Spacer(1, 12))
-            Story.append(Paragraph("Sartorial", styles["Title"]))
+            Story.append(Paragraph("Sartorial Referencia de Pago", styles["Title"]))
             Story.append(Spacer(1, 12))
             Story.append(Paragraph(f"Fecha: {datetime.now().date()}", styles["Normal"]))
             Story.append(Paragraph(f"Cliente: {current_user.name}", styles["Normal"]))
+            Story.append(Paragraph(f"Referencia #1234567890", styles["Normal"]))
+            Story.append(Paragraph(f"Cuenta Bancaria: 8675309012345", styles["Normal"]))
+            Story.append(Paragraph(f"Titular de la cuenta: Sartorial", styles["Normal"]))             
+            Story.append(Spacer(1, 12))
             Story.append(Spacer(1, 12))
             # Agregar detalles del pedido
             detProductos = []
@@ -257,7 +267,7 @@ def pagar():
             Story.append(Spacer(1, 12))
             #Agregar total a pagar
 
-            Story.append(Paragraph(f"Total a pagar: ${totalFac}", styles["Normal"]))
+            Story.append(Paragraph(f"Total a pagar: ${totalFac}", styles["Negrita"]))
             doc.build(Story)
             
             #Descargar archivo PDF
@@ -312,12 +322,13 @@ def pago_tarjeta():
         output = io.BytesIO()
         doc = SimpleDocTemplate(output, pagesize=letter)
         styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Negrita', fontName='Helvetica-Bold', fontSize=14))
         Story = []
         # Agregar encabezado
-        #im = Image("../static/img/logo_size_invert.jpg", width=150, height=150)
-        #Story.append(im)
+        im = Image("C:/IDGS802/ProyectoFinal_v2/ProyectoFinal-Sergio/project/static/images/Logo3S.png", width=300, height=150)
+        Story.append(im) 
         Story.append(Spacer(1, 12))
-        Story.append(Paragraph("Sartorial", styles["Title"]))
+        Story.append(Paragraph("Sartorial Referencia de Pago", styles["Title"]))
         Story.append(Spacer(1, 12))
         Story.append(Paragraph(f"Fecha: {datetime.now().date()}", styles["Normal"]))
         Story.append(Paragraph(f"Cliente: {current_user.name}", styles["Normal"]))
@@ -355,7 +366,7 @@ def pago_tarjeta():
         Story.append(Spacer(1, 12))
         #Agregar total a pagar
 
-        Story.append(Paragraph(f"Total a pagar: ${totalFac}", styles["Normal"]))
+        Story.append(Paragraph(f"Total a pagar: ${totalFac}", styles["Negritas"]))
         doc.build(Story)
             
         #Descargar archivo PDF
@@ -392,7 +403,9 @@ def pagarTodo():
                         detProductos[prod.id] = {
                             'id': prod.id,
                             'nombre': prod.nombre,
+                            'modelo': prod.modelo,
                             'precio': prod.precio,
+                            'descripcion': prod.descripcion,
                             'cantidad': producto.cantidad,
                             'imagen': prod.imagen   
                         }
@@ -432,12 +445,13 @@ def pagarTodo():
                 output = io.BytesIO()
                 doc = SimpleDocTemplate(output, pagesize=letter)
                 styles = getSampleStyleSheet()
+                styles.add(ParagraphStyle(name='Negrita', fontName='Helvetica-Bold', fontSize=14))
                 Story = []
                 # Agregar encabezado
-                #im = Image("../static/img/logo_size_invert.jpg", width=150, height=150)
-                #Story.append(im)
+                im = Image("C:/IDGS802/ProyectoFinal_v2/ProyectoFinal-Sergio/project/static/images/Logo3S.png", width=300, height=150)
+                Story.append(im) 
                 Story.append(Spacer(1, 12))
-                Story.append(Paragraph("Sartorial", styles["Title"]))
+                Story.append(Paragraph("Sartorial Referencia de Pago", styles["Title"]))
                 Story.append(Spacer(1, 12))
                 Story.append(Paragraph(f"Fecha: {datetime.now().date()}", styles["Normal"]))
                 Story.append(Paragraph(f"Cliente: {current_user.name}", styles["Normal"]))
@@ -498,7 +512,7 @@ def pagarTodo():
                 Story.append(Spacer(1, 12))
                     #Agregar total a pagar
 
-                Story.append(Paragraph(f"Total a pagar: ${totalFac}", styles["Normal"]))
+                Story.append(Paragraph(f"Total a pagar: ${totalFac}", styles["Negrita"]))
                 doc.build(Story)
                     
                     #Descargar archivo PDF
@@ -542,12 +556,13 @@ def pago_tarjetaT():
          output = io.BytesIO()
          doc = SimpleDocTemplate(output, pagesize=letter)
          styles = getSampleStyleSheet()
+         styles.add(ParagraphStyle(name='Negrita', fontName='Helvetica-Bold', fontSize=14))
          Story = []
          # Agregar encabezado
-         #im = Image("../static/img/logo_size_invert.jpg", width=150, height=150)
-         #Story.append(im)
+         im = Image("C:/IDGS802/ProyectoFinal_v2/ProyectoFinal-Sergio/project/static/images/Logo3S.png", width=300, height=150)
+         Story.append(im) 
          Story.append(Spacer(1, 12))
-         Story.append(Paragraph("Sartorial", styles["Title"]))
+         Story.append(Paragraph("Sartorial Referencia de Pago", styles["Title"]))
          Story.append(Spacer(1, 12))
          Story.append(Paragraph(f"Fecha: {datetime.now().date()}", styles["Normal"]))
          Story.append(Paragraph(f"Cliente: {current_user.name}", styles["Normal"]))
@@ -605,7 +620,7 @@ def pago_tarjetaT():
          Story.append(Spacer(1, 12))
                     #Agregar total a pagar
 
-         Story.append(Paragraph(f"Total a pagar: ${totalFac}", styles["Normal"]))
+         Story.append(Paragraph(f"Total a pagar: ${totalFac}", styles["Negrita"]))
          doc.build(Story)
                     
                     #Descargar archivo PDF

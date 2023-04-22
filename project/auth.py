@@ -46,6 +46,8 @@ def login_post():
     
     if user.has_role('admin'):
         return redirect(url_for('administrador.finanzas'))
+    if user.empleado:
+        return redirect(url_for('empleado.inventarios'))
     else:
         return redirect(url_for('main.index'))
     

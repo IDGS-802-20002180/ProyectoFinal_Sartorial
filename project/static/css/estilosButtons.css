@@ -88,4 +88,9 @@ button:active {
     transition: box-shadow 0.2s ease-in, -webkit-box-shadow 0.2s ease-in;
 }
 
-
+.form-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }

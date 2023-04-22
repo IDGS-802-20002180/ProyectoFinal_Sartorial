@@ -2,7 +2,7 @@
 
 {% block content %}
 <link rel="stylesheet" href="../static/css/detalleProducto.css">
-<div class="container mt-5" id="contenedorProducto">
+<div class="container mt-5 my-5" id="contenedorProducto" >
   <div class="row">
     <div class="col-md-6">
       <img src="{{ url_for('static', filename='img/' + productos[0].imagen) }}" alt="Imagen del Producto" height="300">
@@ -34,27 +34,38 @@
       <form id="agregarCarrito" method="POST" action="{{ url_for('cliente.pedidos')}}">
         <div class="form-group">
           <label for="cantidad">Cantidad: </label>
-          <input min="0" max="10" type="number" class="form-control" id="txtCantCar" value="1">                
-          <button class="btn btn-primary mt-3" onclick="carrito()">Agregar a Carrito</button>      
+          <input min="0" max="5" type="number" class="form-control" id="txtCantCar" value="1">                
+          <button class="btn" onclick="carrito()" id="addCar"><i class="fa-solid fa-cart-plus"></i> Agregar a Carrito</button>      
+      </form>  
+
+
+          
         </div>
-      </form>     
+        <div>
+
+        </div> 
+         
       {% else %}
       <form id="regresarLogin" action="{{ url_for('auth.login')}}">
         <div class="form-group">
           <label for="cantidad">Cantidad: </label>
-          <input type="number" class="form-control" id="cantidad" value="0">                
-          <button class="btn btn-primary mt-3" onclick="">Agregar a Carrito</button>      
+          <input type="number" class="form-control" id="cantidad" value="0" min="0">                    
         </div>
       </form> 
       <div>
-        <button id="verTallas" class="learn-more">
-          <span class="circle" aria-hidden="true">
-            <span class="icon arrow"></span>
-          </span>
-          <span class="button-text">Guía de Tallas</span>
-        </button>
+        <form id="regresarLogin" action="{{ url_for('auth.login')}}">
+        <button class="btn" onclick="carrito()" id="addCar"><i class="fa-solid fa-cart-plus"></i> Agregar a Carrito</button>      
+        </form>
+
       </div> 
+    
       {% endif %}
+      <button type="button" id="verTallas" class="learn-more" onclick="abrirVentana();">
+        <span class="circle" aria-hidden="true">
+          <span class="icon arrow"></span>
+        </span>
+        <span class="button-text">Guía de Tallas</span>
+      </button>
     </div>
   </div>
 </div>
@@ -88,4 +99,10 @@ function carrito() {
 }
 
     </script>
+          <script>
+            function abrirVentana() {
+              // Abre una nueva ventana con la imagen de la guía de tallas
+              window.open("../static/images/guiaTallas.jpg", "_blank", "height=600,width=800");
+            }
+            </script>
 {%  endblock %}

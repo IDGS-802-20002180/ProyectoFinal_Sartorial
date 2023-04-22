@@ -386,8 +386,14 @@ body {
 }
 
 #al {
-  color: gold;
+  color: goldenrod; /* dorado metálico */
   font-family: 'Times New Roman', Times, serif;
+  font-size: smaller;
+}
+#al2 {
+  color: goldenrod; /* dorado metálico */
+  font-family: 'Times New Roman', Times, serif;
+  font-size: larger;
 }
 
 #content {

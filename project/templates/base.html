@@ -29,78 +29,99 @@
 
       <div class="collapse navbar-collapse" id="navbarMenuHeroA">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('main.index') }}" id="al">Inicio</a>
-          </li>
-          {% if current_user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="#" id="al">{{current_user.name}}</a>
-            
-          </li>
-          {% endif %}
+
           {% if current_user.admin %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('main.principalAd') }}" id="al">Productos</a>
+            <a class="nav-link" href="{{ url_for('main.principalAd') }}" id="al" title="Productos"><i class="fa-solid fa-shirt fa-lg"></i> Productos</a>
           </li>
           {% endif%}
           {% if current_user.admin %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('administrador.inventarios') }}" id="al">Inventario</a>
+            <a class="nav-link" href="{{ url_for('administrador.inventarios') }}" id="al" title="Inventarios"><i class="fa-solid fa-boxes-stacked fa-lg"></i> Inventarios</a>
+          </li>
+          {% endif%}
+          {% if current_user.empleado %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('empleado.inventarios') }}" id="al" title="Inventarios"><i class="fa-solid fa-boxes-stacked fa-lg"></i> Inventarios</a>
           </li>
           {% endif%}
           {% if current_user.admin %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('administrador.proveedores') }} " title="Producto" id="al">Proveedores</a>
+            <a class="nav-link" href="{{ url_for('administrador.proveedores') }} " id="al" title="Proveedores"><i class="fa-solid fa-truck-field-un fa-lg"></i> Proveedores</a>
           </li>
           {% endif%}
           {% if current_user.admin %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('administrador.getAllUsers') }}" id="al">Usuarios</a>
+            <a class="nav-link" href="{{ url_for('administrador.getAllUsers') }}" id="al" title="Usuarios"><i class="fa-regular fa-circle-user fa-lg"></i> Usuarios</a>
           </li>
           {% endif%}
           {% if current_user.admin %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('administrador.finanzas') }}" id="al">Finanzas</a>
+            <a class="nav-link" href="{{ url_for('administrador.finanzas') }}" id="al" title="Finanzas"><i class="fa-solid fa-chart-line fa-lg"></i> Finanzas</a>
           </li>
           {% endif%}
 
-          {% if current_user.is_authenticated and current_user.admin != 1 %}
+          {% if current_user.is_authenticated and  not current_user.admin  and not current_user.empleado %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('cliente.misCompras') }}" id="al">Mis Compras</a>
+            <a class="nav-link" href="{{ url_for('cliente.misCompras') }}" id="al2"><i class="fa-solid fa-bag-shopping fa-lg"></i> Mis Compras</a>
           </li>
           {% endif %}
 
-          {% if current_user.is_authenticated and current_user.admin != 1 %}
+          {% if current_user.is_authenticated and not current_user.admin  and not current_user.empleado  %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('cliente.pedidos') }}" id="al">Mis Pedidos</a>
+            <a class="nav-link" href="{{ url_for('cliente.pedidos') }}" id="al2"><i class="fa-solid fa-cart-shopping fa-lg"></i> Carrito <span class="badge badge-pill badge-danger">{{ pedidos_disponibles }}</span>
+            </a></a>
           </li>
           {% endif %}
 
           {% if current_user.admin %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('administrador.catalogoCompras') }}" id="al">Compras</a>
+            <a class="nav-link" href="{{ url_for('administrador.catalogoCompras') }}" id="al" title="Compras"><i class="fa-solid fa-money-check-dollar fa-lg"></i> Compras</a>
+          </li>
+          {% endif %}
+
+          {% if current_user.empleado %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('empleado.catalogoCompras') }}" id="al" title="Compras"><i class="fa-solid fa-money-check-dollar fa-lg"></i> Compras</a>
           </li>
           {% endif %}
 
           {% if current_user.admin %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('administrador.ventas') }}" id="al">Ventas</a>
+            <a class="nav-link" href="{{ url_for('administrador.ventas') }}" id="al" title="Ventas"><i class="fa-solid fa-basket-shopping fa-lg"></i> Ventas</a>
           </li>
           {% endif %}
 
-          {% if current_user.is_authenticated and current_user.admin != 1 %}
+
+          {% if current_user.empleado %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('main.nosotros') }}" id="al">Nosotros</a>
+            <a class="nav-link" href="{{ url_for('empleado.ventas') }}" id="al" title="Ventas"><i class="fa-solid fa-basket-shopping fa-lg"></i> Ventas</a>
+          </li>
+          {% endif %}
+
+          {% if not current_user.admin and not current_user.empleado%}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.nosotros') }}" id="al2"><i class="fa-solid fa-users-viewfinder fa-lg"></i> Nosotros</a>
           </li>
           {% endif %}
           {% if not current_user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('auth.login') }}" id="al">Logearte</a>
+            <a class="nav-link" href="{{ url_for('auth.login') }}" id="al2">LogIn-SingUp</a>
           </li>
           {% endif %}
-          {% if current_user.is_authenticated %}
+          {% if current_user.is_authenticated and not current_user.admin  and not current_user.empleado  %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('auth.logout') }}" id="al">Cerrar Sesión</a>
+            <a class="nav-link" href="{{ url_for('auth.logout') }}" id="al2" title="Salir"><i class="fa-solid fa-arrow-right-from-bracket fa-lg"></i> Salir</a>
+          </li>
+          {% endif %}
+          {% if current_user.is_authenticated and current_user.admin %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('auth.logout') }}" id="al" title="Salir"><i class="fa-solid fa-arrow-right-from-bracket fa-lg"></i> Salir</a>
+          </li>
+          {% endif %}
+          {% if current_user.is_authenticated and current_user.empleado %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('auth.logout') }}" id="al" title="Salir"><i class="fa-solid fa-arrow-right-from-bracket fa-lg"></i> Salir</a>
           </li>
           {% endif %}
 

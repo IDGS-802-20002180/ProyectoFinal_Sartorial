@@ -6,11 +6,6 @@
     <div class="form-container sign-up-container">
         <form method="POST" action="/security/register">
             <h1>Crea una Cuenta</h1>
-            <div class="social-container">
-                <a href="#" class="social"><i class="fa-brands fa-facebook"></i></a>
-                <a href="#" class="social"><i class="fa-brands fa-google" style="color: #ff570f;"></i></a>
-                <a href="#" class="social"><i class="fa-brands fa-linkedin" style="color: #01286a;"></i></a>
-            </div>
             {% with messages = get_flashed_messages() %}
             {% if messages %}
             <div class="alert alert-danger">
@@ -28,11 +23,7 @@
     <div class="form-container sign-in-container">
         <form method="POST" action="/security/login">
             <h1>Iniciar Sesión</h1>
-            <div class="social-container">
-                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-            </div>
+
             {% with messages = get_flashed_messages() %}
             {% if messages %}
             <div class="alert alert-danger">
