@@ -1,5 +1,5 @@
 Comandos de arranque para nque la aplicaicon se ejecute en el VSCode
-ssss
+
 SET FLASK_APP=project
 SET FLASK_ENV=development
 SET FLASK_DEBUG=True
